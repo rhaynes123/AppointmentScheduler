@@ -3,7 +3,7 @@ require_once('header.php');
 require_once("Controllers/IndexController.php");
 ?>
 <div class="text-center">
-    <h1>View Appointments</h1>
+    <h1><?php echo $title ?></h1>
 </div>
 <div>
 <table class="table table-hover table-bordered">
@@ -19,8 +19,6 @@ require_once("Controllers/IndexController.php");
         </thead>
         <tbody>
             <?php
-            $index = new IndexController();
-            $appointments = $index->GetAppointments();
             if(isset($appointments) && !empty($appointments))
             {
                 foreach($appointments as $appointment)

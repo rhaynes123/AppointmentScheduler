@@ -10,55 +10,62 @@ class IndexController
     }
     public function LoadHomePage()
     {
-        $this->render('Views/home.php');
+        require_once('Views/home.php');
     }
+
+    public function LoadMakeAppointmentPage()
+    {
+        require_once('Views/MakeAppointment.php');
+    }
+
     public function LoadViewAppointmentsPage()
     {
         try
         {
-            $this->render('Views/ViewAppointments.php');
+            $title = "Appointments";
+            $appointments = $this->dbcontext->GetAppointments();
+            require_once('Views/ViewAppointments.php');
         }
         catch(PDOException $ex)
         {
             error_log($ex->getMessage());
-            $this->render('Views/error.php');
+            require_once('Views/error.php');
         }
         catch(Error $ex)
         {
             error_log($ex->getMessage());
-            $this->render('Views/error.php');
+            require_once('Views/error.php');
         }
     }
-    public function LoadMakeAppointmentPage()
-    {
-        $this->render('Views/MakeAppointment.php');
-    }
-    public function GetAppointments()
-    {
-        return $this->dbcontext->GetAppointments();
-    }
+    
+    
     public function SaveNewAppointment($appointmentPost)
     {
         try
         {
-            $appointment = new Appointment($appointmentPost);
-            $this->dbcontext->CreateAppointment($appointment);
-            $this->render('Views/ViewAppointments.php');
+            $errors = Appointment::Validate();
+            if(!empty($errors))
+            {
+                require_once('Views/MakeAppointment.php');
+            }
+            else
+            {
+                $appointment = new Appointment($appointmentPost);
+                $this->dbcontext->CreateAppointment($appointment);
+                $this->LoadViewAppointmentsPage();
+            }
         }
         catch(PDOException $ex)
         {
             error_log($ex->getMessage());
-            $this->render('Views/error.php');
+            require_once('Views/error.php');
         }
         catch(Error $ex)
         {
             error_log($ex->getMessage());
-            $this->render('Views/error.php');
+            require_once('Views/error.php');
         }
         
     }
-    private function render($file) 
-    {
-        include $file;
-    } 
+    
 }
