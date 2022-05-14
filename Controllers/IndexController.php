@@ -1,6 +1,7 @@
 <?php
-require_once('Models/Appointment.php');
 require_once('Data/Dbcontext.php');
+require_once('Models/Appointment.php');
+
 class IndexController
 {
     private $dbcontext;

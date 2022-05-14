@@ -10,22 +10,12 @@ class Appointment
 
     public function __construct($post)
     {
-        $data = array_map('htmlspecialchars', $post);// Santizing our data on construction 
-       
-        if(empty($data) || !isset($data["AppointmentDate"], $data["Firstname"], $data["Lastname"],$data["EmailAddress"]))// Making sure we got all the required stuff
-        {
-            die("One Or More Required Fields Were Not Provided!");
-        }
-        if($data["AppointmentDate"] < date('Y-m-d'))
-        {
-            die("Appointment Has To Be In the Future");
-        }
         $this->AppointmentNumber = uniqid(date("Ymd"));
-        $this->Firstname = htmlspecialchars($data["Firstname"]);
-        $this->Lastname = htmlspecialchars($data["Lastname"]);
-        $this->Date = $data["AppointmentDate"];
-        $this->EmailAddress = $data["EmailAddress"];
-        $this->Notes = $data["Notes"];
+        $this->Firstname = htmlspecialchars($post["Firstname"]);
+        $this->Lastname = htmlspecialchars($post["Lastname"]);
+        $this->Date = $post["AppointmentDate"];
+        $this->EmailAddress = $post["EmailAddress"];
+        $this->Notes = htmlspecialchars($post["Notes"]);
     }
     public function Number()
     {
@@ -89,9 +79,9 @@ class Appointment
             $errors['Notes'] = "Notes Has Too Many Characters";
         }
 
-        foreach($errors as $error)
+        foreach($errors as $key => $error)
         {
-            error_log($error);
+            error_log("value: $key Message: $error");
         }
 
         return $errors;

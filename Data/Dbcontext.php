@@ -1,5 +1,4 @@
 <?php
-require_once('Models/Appointment.php');
 class Dbcontext extends SQLite3
 {
     private $pdo;
